@@ -1,5 +1,5 @@
-
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
+import { motion, animate, useMotionValue, useTransform } from 'framer-motion';
 
 type VisualizationType = 'efficiency' | 'vector' | 'bandit' | 'static';
 
@@ -10,6 +10,28 @@ interface InteractiveFormulaBlockProps {
   variables: string[];
   visualizationType: VisualizationType;
 }
+
+// --- Smooth Counter Component ---
+const Counter = ({ value, className }: { value: number, className: string }) => {
+    const nodeRef = useRef<HTMLParagraphElement>(null);
+    
+    useEffect(() => {
+        const node = nodeRef.current;
+        if (!node) return;
+        
+        const controls = animate(parseFloat(node.textContent || "0"), value, {
+            duration: 0.8,
+            onUpdate(v) {
+                node.textContent = v.toFixed(2);
+            },
+            ease: "easeOut"
+        });
+        
+        return () => controls.stop();
+    }, [value]);
+
+    return <p ref={nodeRef} className={className}>{value.toFixed(2)}</p>;
+};
 
 // --- Efficiency Score Visualization ---
 const EfficiencyVisualizer = () => {
@@ -25,22 +47,22 @@ const EfficiencyVisualizer = () => {
     }, [volume, cpc, difficulty]);
     
     const scoreColor = useMemo(() => {
-        if (score > 15) return 'bg-green-500/80';
-        if (score > 5) return 'bg-yellow-500/80';
-        return 'bg-red-500/80';
+        if (score > 15) return 'text-green-400 border-green-500/50 bg-green-900/20';
+        if (score > 5) return 'text-yellow-400 border-yellow-500/50 bg-yellow-900/20';
+        return 'text-red-400 border-red-500/50 bg-red-900/20';
     }, [score]);
 
     return (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
-            <div className="space-y-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+            <div className="space-y-6">
                 <Slider label="V (Volume)" min={100} max={50000} step={100} value={volume} onChange={e => setVolume(Number(e.target.value))} displayValue={volume.toLocaleString()} />
                 <Slider label="CPC" min={0.1} max={20} step={0.1} value={cpc} onChange={e => setCpc(Number(e.target.value))} displayValue={`$${cpc.toFixed(2)}`} />
                 <Slider label="D (Difficulty)" min={1} max={100} step={1} value={difficulty} onChange={e => setDifficulty(Number(e.target.value))} displayValue={difficulty.toString()} />
             </div>
-            <div className="flex flex-col items-center justify-center bg-gray-900 p-6 rounded-lg h-full">
-                <p className="text-sm text-gray-400 mb-2">Efficiency Score (E)</p>
-                <div className={`text-5xl font-bold text-white px-6 py-3 rounded-md transition-colors duration-300 ${scoreColor}`}>
-                    {score.toFixed(2)}
+            <div className="flex flex-col items-center justify-center bg-gray-900 p-8 rounded-xl border border-gray-800">
+                <p className="text-sm font-mono text-gray-500 uppercase tracking-widest mb-4">Efficiency Score (E)</p>
+                <div className={`text-6xl font-bold font-mono px-8 py-4 rounded-lg border-2 transition-colors duration-300 ${scoreColor}`}>
+                    <Counter value={score} className="" />
                 </div>
             </div>
         </div>
@@ -49,11 +71,11 @@ const EfficiencyVisualizer = () => {
 
 const Slider = ({ label, min, max, step, value, onChange, displayValue }) => (
     <div>
-        <div className="flex justify-between items-center mb-1">
-            <label className="text-sm font-medium text-gray-300">{label}</label>
+        <div className="flex justify-between items-center mb-2">
+            <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">{label}</label>
             <span className="text-sm font-mono text-cyan-400">{displayValue}</span>
         </div>
-        <input type="range" min={min} max={max} step={step} value={value} onChange={onChange} className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer" />
+        <input type="range" min={min} max={max} step={step} value={value} onChange={onChange} className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-cyan-500" />
     </div>
 );
 
@@ -78,26 +100,38 @@ const VectorVisualizer = () => {
     }, [similarity]);
 
     return (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
             <div>
                  <Slider label="Angle (θ)" min={0} max={180} step={1} value={angle} onChange={e => setAngle(Number(e.target.value))} displayValue={`${angle}°`} />
-                 <div className="mt-6 text-center bg-gray-900 p-4 rounded-lg">
-                    <p className="text-sm text-gray-400 mb-1">Cosine Similarity</p>
+                 <div className="mt-8 text-center bg-gray-900 p-6 rounded-xl border border-gray-800">
+                    <p className="text-xs font-mono text-gray-500 uppercase tracking-widest mb-2">Cosine Similarity</p>
                     <p className={`text-4xl font-bold font-mono transition-colors duration-300 ${similarityColor}`}>
                         {similarity.toFixed(3)}
                     </p>
                  </div>
             </div>
-            <div className="flex items-center justify-center">
-                <svg viewBox="-10 -100 120 120" className="w-full max-w-[250px]">
-                    <line x1="0" y1="0" x2={vectorB.x} y2={vectorB.y} stroke="#34d399" strokeWidth="2" />
-                    <text x={vectorB.x + 5} y={vectorB.y} fill="#34d399" fontSize="8" dy="3">B (Ideal)</text>
+            <div className="flex items-center justify-center p-4">
+                <svg viewBox="-20 -100 140 120" className="w-full max-w-[250px] overflow-visible">
+                    <motion.line 
+                        x1="0" y1="0" x2={vectorB.x} y2={vectorB.y} 
+                        stroke="#34d399" strokeWidth="4" strokeLinecap="round" 
+                        initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 1 }}
+                    />
+                    <text x={vectorB.x + 10} y={vectorB.y} fill="#34d399" fontSize="10" dy="3" fontWeight="bold">B (Ideal)</text>
                     
-                    <line x1="0" y1="0" x2={vectorA.x} y2={vectorA.y} stroke="#06b6d4" strokeWidth="2" />
-                    <text x={vectorA.x + 5} y={vectorA.y - 5} fill="#06b6d4" fontSize="8" dy="3">A (Our Content)</text>
+                    <motion.line 
+                        x1="0" y1="0" 
+                        animate={{ x2: vectorA.x, y2: vectorA.y }}
+                        stroke="#06b6d4" strokeWidth="4" strokeLinecap="round"
+                    />
+                    <motion.text 
+                        animate={{ x: vectorA.x + 10, y: vectorA.y - 5 }}
+                        fill="#06b6d4" fontSize="10" dy="3" fontWeight="bold"
+                    >
+                        A (Content)
+                    </motion.text>
                     
-                    <path d={`M 20 0 A 20 20 0 0 1 ${getCoords(angle, 20).x} ${getCoords(angle, 20).y}`} stroke="gray" strokeWidth="1" fill="none" />
-                    <text x="25" y="-15" fill="gray" fontSize="8">{angle}°</text>
+                    <path d={`M 30 0 A 30 30 0 0 1 ${getCoords(angle, 30).x} ${getCoords(angle, 30).y}`} stroke="gray" strokeWidth="1" strokeDasharray="4 4" fill="none" />
                 </svg>
             </div>
         </div>
@@ -114,7 +148,6 @@ const BanditVisualizer = () => {
     const LEARNING_RATE = 0.1;
 
     const runStep = useCallback(() => {
-        // Epsilon-greedy strategy: 80% exploit, 20% explore
         const explore = Math.random() < 0.2;
         let choiceIndex: number;
         if (explore) {
@@ -124,7 +157,6 @@ const BanditVisualizer = () => {
         }
         
         const chosenArm = arms[choiceIndex];
-        // Simulate a click with a true CTR (e.g., A=7%, B=12%)
         const trueCTR = choiceIndex === 0 ? 0.07 : 0.12;
         const reward = Math.random() < trueCTR ? 1 : 0;
 
@@ -140,32 +172,56 @@ const BanditVisualizer = () => {
         };
         
         setArms(newArms);
-        const logMessage = `Step ${log.length + 1}: ${explore ? 'Exploring' : 'Exploiting'}. Pulled ${chosenArm.name}. ${reward > 0 ? 'Got a click!' : 'No click.'} New CTR estimate: ${newValue.toFixed(3)}`;
+        const logMessage = `Step ${log.length + 1}: ${explore ? 'EXPLORE' : 'EXPLOIT'} > ${chosenArm.name}. ${reward > 0 ? 'CLICK!' : 'No Click'} > New CTR: ${(newValue * 100).toFixed(1)}%`;
         setLog(prev => [logMessage, ...prev].slice(0, 5));
 
     }, [arms, log.length]);
 
     return (
         <div>
-            <div className="flex justify-center mb-6">
-                <button onClick={runStep} className="bg-cyan-600 text-white font-bold py-2 px-6 rounded-md hover:bg-cyan-500 transition-colors">
-                    Run Simulation Step
-                </button>
+            <div className="flex justify-center mb-8">
+                <motion.button 
+                    whileTap={{ scale: 0.95 }}
+                    whileHover={{ scale: 1.05 }}
+                    onClick={runStep} 
+                    className="bg-gradient-to-r from-cyan-600 to-cyan-500 text-white font-bold py-3 px-8 rounded-full shadow-lg shadow-cyan-500/30 hover:shadow-cyan-500/50 transition-all"
+                >
+                    Run Simulation Cycle
+                </motion.button>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 {arms.map(arm => (
-                    <div key={arm.name} className="bg-gray-900 p-4 rounded-lg text-center">
-                        <h5 className="font-bold text-white">{arm.name}</h5>
-                        <p className="text-3xl font-mono text-cyan-400 my-2">{(arm.value * 100).toFixed(2)}%</p>
-                        <p className="text-xs text-gray-400">Estimated CTR ({arm.pulls} pulls)</p>
-                    </div>
+                    <motion.div 
+                        key={arm.name} 
+                        layout
+                        className="bg-gray-900 p-6 rounded-lg text-center border border-gray-800 relative overflow-hidden"
+                    >
+                        <div className="relative z-10">
+                            <h5 className="font-bold text-white text-lg">{arm.name}</h5>
+                            <p className="text-4xl font-mono text-cyan-400 my-3">{(arm.value * 100).toFixed(1)}%</p>
+                            <p className="text-xs text-gray-500 uppercase tracking-wide">CTR Estimate ({arm.pulls} pulls)</p>
+                        </div>
+                        {/* Background Bar based on probability */}
+                        <motion.div 
+                            className="absolute bottom-0 left-0 h-1 bg-cyan-500"
+                            animate={{ width: `${arm.value * 500}%` }}
+                        />
+                    </motion.div>
                 ))}
             </div>
-            <div className="bg-gray-900 p-4 rounded-lg h-40 overflow-y-auto">
-                 <p className="text-sm font-semibold text-gray-400 mb-2">Simulation Log:</p>
+            <div className="bg-black/40 p-4 rounded-lg h-48 overflow-y-auto font-mono text-xs border border-gray-800">
                  {log.map((entry, i) => (
-                    <p key={i} className="font-mono text-xs text-gray-500">{entry}</p>
+                    <motion.div 
+                        key={i} 
+                        initial={{ opacity: 0, x: -10 }} 
+                        animate={{ opacity: 1, x: 0 }}
+                        className="mb-1 p-2 border-b border-gray-800 last:border-0 text-gray-400"
+                    >
+                        <span className="text-cyan-500 mr-2">➜</span>
+                        {entry}
+                    </motion.div>
                  ))}
+                 {log.length === 0 && <p className="text-gray-600 text-center mt-10">Waiting for initialization...</p>}
             </div>
         </div>
     );
@@ -175,42 +231,35 @@ const BanditVisualizer = () => {
 export const InteractiveFormulaBlock: React.FC<InteractiveFormulaBlockProps> = ({ title, description, equation, variables, visualizationType }) => {
   const renderVisualizer = () => {
     switch (visualizationType) {
-      case 'efficiency':
-        return <EfficiencyVisualizer />;
-      case 'vector':
-        return <VectorVisualizer />;
-      case 'bandit':
-          return <BanditVisualizer />;
-      case 'static':
-          return null;
-      default:
-        return null;
+      case 'efficiency': return <EfficiencyVisualizer />;
+      case 'vector': return <VectorVisualizer />;
+      case 'bandit': return <BanditVisualizer />;
+      case 'static': return null;
+      default: return null;
     }
   };
 
-  const visualizer = renderVisualizer();
-
   return (
-    <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-6">
-      <h4 className="text-xl font-bold text-white">{title}</h4>
-      <p className="text-gray-400 mt-1 mb-4">{description}</p>
-      <div className="bg-gray-900 p-4 rounded-md text-center my-4 border border-gray-600">
-        <p className="font-mono text-xl md:text-2xl text-cyan-300 tracking-wider">{equation}</p>
+    <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-6 md:p-8">
+      <h4 className="text-2xl font-bold text-white mb-2">{title}</h4>
+      <p className="text-gray-400 mb-6 leading-relaxed">{description}</p>
+      <div className="bg-gray-900 p-6 rounded-lg text-center my-6 border border-gray-600 shadow-inner">
+        <p className="font-mono text-xl md:text-3xl text-cyan-300 tracking-wider">{equation}</p>
       </div>
 
-      {visualizer && (
-        <div className="mt-6 pt-6 border-t border-gray-700">
-          <h5 className="text-center font-bold text-white mb-4">Interactive Model</h5>
-          {visualizer}
+      {visualizationType !== 'static' && (
+        <div className="mt-8 pt-8 border-t border-gray-700">
+          <h5 className="text-center text-sm font-bold text-gray-500 uppercase tracking-widest mb-8">Interactive Simulation Model</h5>
+          {renderVisualizer()}
         </div>
       )}
 
-      <div className="mt-6 pt-6 border-t border-gray-700">
-        <h5 className="font-semibold text-white mb-2">Variable Definitions</h5>
-        <div className="space-y-2">
+      <div className="mt-8 pt-8 border-t border-gray-700">
+        <h5 className="font-semibold text-white mb-4">Variable Definitions</h5>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           {variables.map((variable, index) => (
-            <p key={index} className="font-mono text-gray-300 text-sm">
-              <span className="text-cyan-400">{variable.split('=')[0]}</span>
+            <p key={index} className="font-mono text-gray-300 text-sm bg-gray-900/50 p-2 rounded">
+              <span className="text-cyan-400 font-bold">{variable.split('=')[0]}</span>
               {variable.includes('=') && ` = ${variable.split('=')[1]}`}
             </p>
           ))}

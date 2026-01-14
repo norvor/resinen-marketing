@@ -1,16 +1,15 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { Logo } from './Logo';
 
-type Page = 'home' | 'framework';
-interface Framework {
-  id: string;
-  name: string;
-}
+type Page = 'home' | 'framework' | 'engine';
+
+interface NavItem { id: string; name: string; }
+
 interface NavbarProps {
   onNavigate: (page: Page, slug?: string) => void;
   currentPage: Page;
-  frameworks: Framework[];
+  frameworks: NavItem[];
+  engines: NavItem[]; // New Prop
 }
 
 const NavLink: React.FC<{
@@ -30,27 +29,48 @@ const NavLink: React.FC<{
   </button>
 );
 
-export const Navbar: React.FC<NavbarProps> = ({ onNavigate, currentPage, frameworks }) => {
-  const [isDropdownOpen, setDropdownOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
+// Helper for dropdowns
+const Dropdown = ({ label, items, active, onSelect }: { label: string, items: NavItem[], active: boolean, onSelect: (id: string) => void }) => {
+    const [isOpen, setIsOpen] = useState(false);
+    const ref = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setDropdownOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (ref.current && !ref.current.contains(event.target as Node)) setIsOpen(false);
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
 
-  const handleFrameworkNavigate = (slug: string) => {
-    onNavigate('framework', slug);
-    setDropdownOpen(false);
-  };
+    return (
+        <div className="relative" ref={ref}>
+            <button
+                onClick={() => setIsOpen(!isOpen)}
+                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 flex items-center gap-1 ${
+                    active ? 'bg-gray-700 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white'
+                }`}
+            >
+                {label}
+                <svg className={`w-4 h-4 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            {isOpen && (
+                <div className="absolute right-0 mt-2 w-64 bg-gray-800 border border-gray-700 rounded-md shadow-lg py-1 z-50">
+                    {items.map(item => (
+                        <button
+                            key={item.id}
+                            onClick={() => { onSelect(item.id); setIsOpen(false); }}
+                            className="block w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white"
+                        >
+                            {item.name}
+                        </button>
+                    ))}
+                </div>
+            )}
+        </div>
+    );
+};
 
+export const Navbar: React.FC<NavbarProps> = ({ onNavigate, currentPage, frameworks, engines }) => {
   return (
     <nav className="bg-gray-900/80 backdrop-blur-sm sticky top-0 z-50 border-b border-gray-700">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -62,35 +82,21 @@ export const Navbar: React.FC<NavbarProps> = ({ onNavigate, currentPage, framewo
             </button>
           </div>
           <div className="flex items-center space-x-4">
-            <NavLink onClick={() => onNavigate('home')} isActive={currentPage === 'home'}>
-              Home
-            </NavLink>
-            <div className="relative" ref={dropdownRef}>
-              <button
-                onClick={() => setDropdownOpen(!isDropdownOpen)}
-                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 flex items-center gap-1 ${
-                  currentPage === 'framework'
-                    ? 'bg-gray-700 text-white'
-                    : 'text-gray-300 hover:bg-gray-800 hover:text-white'
-                }`}
-              >
-                Frameworks
-                <svg className={`w-4 h-4 transition-transform duration-200 ${isDropdownOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
-              </button>
-              {isDropdownOpen && (
-                <div className="absolute right-0 mt-2 w-64 bg-gray-800 border border-gray-700 rounded-md shadow-lg py-1 z-50">
-                  {frameworks.map(fw => (
-                    <button
-                      key={fw.id}
-                      onClick={() => handleFrameworkNavigate(fw.id)}
-                      className="block w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white"
-                    >
-                      {fw.name}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
+            <NavLink onClick={() => onNavigate('home')} isActive={currentPage === 'home'}>Home</NavLink>
+            
+            <Dropdown 
+                label="Frameworks" 
+                items={frameworks} 
+                active={currentPage === 'framework'} 
+                onSelect={(id) => onNavigate('framework', id)} 
+            />
+            
+            <Dropdown 
+                label="Engines" 
+                items={engines} 
+                active={currentPage === 'engine'} 
+                onSelect={(id) => onNavigate('engine', id)} 
+            />
           </div>
         </div>
       </div>
