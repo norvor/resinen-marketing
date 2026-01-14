@@ -1,19 +1,56 @@
 export const dossierData = {
   homePage: {
     hero: {
-      title: "Data-Driven Strategy for Market Leaders",
-      subtitle: "Resinen combines proprietary quantitative frameworks with deep industry expertise to unlock unparalleled growth and market dominance for our clients.",
-      cta: "Explore Our Ecosystem"
+      title: "Navigating the Era of High Entropy",
+      subtitle: "Resinen operates at the intersection of graph theory and business physics. We help the world's most ambitious organizations build self-correcting systems for growth, talent, and logistics.",
+      cta: "Read the Firm's Doctrine"
     },
+    // New Section: "McKinsey-style" Featured Articles
+    featuredInsights: [
+      {
+        id: "insight-1",
+        category: "Growth Strategy",
+        title: "The Death of Intuition: Why SEO is Now a Math Problem",
+        summary: "Applying the Knapsack Problem and Boolean Logic to search engine dominance.",
+        date: "OCT 2024",
+        linkType: "framework",
+        linkId: "alpine-quant-yield"
+      },
+      {
+        id: "insight-2",
+        category: "Human Capital",
+        title: "Talent as Energy: Moving Beyond the Static Org Chart",
+        summary: "Why traditional HRIS fails to capture the kinetic potential of a modern workforce.",
+        date: "SEP 2024",
+        linkType: "engine",
+        linkId: "talent-engine"
+      },
+      {
+        id: "insight-3",
+        category: "Market Positioning",
+        title: "Signal Transmission in a Noisy World",
+        summary: "Treating brand resonance as an electrical circuit to minimize impedance.",
+        date: "AUG 2024",
+        linkType: "framework",
+        linkId: "brand-resonance-graph"
+      }
+    ],
+    // New Section: Firm Impact
+    impactStats: [
+      { label: "Capital Optimized", value: "$4.2B" },
+      { label: "Systems Deployed", value: "140+" },
+      { label: "Entropy Reduced", value: "94%" }
+    ],
     frameworkPreview: {
-      title: "Strategic Doctrines (Frameworks)"
+      title: "Strategic Doctrines"
     },
     enginePreview: {
-      title: "Tactical Systems (Engines)"
+      title: "Operational Engines"
     }
   },
-  // ... (Existing frameworks array remains unchanged) ...
+  // ... (keep existing frameworks and engines arrays) ...
   frameworks: [
+    // ... (keep existing frameworks)
     {
       id: 'alpine-quant-yield',
       name: 'Alpine Quant-Yield Framework',
@@ -95,8 +132,8 @@ export const dossierData = {
             visualizationType: "efficiency",
             variables: [
               "V = Monthly Search Volume",
-              "CPC = Cost Per Click",
-              "D = Keyword Difficulty (Squared)"
+              "CPC = Cost Per Click (Proxy for Commercial Intent)",
+              "D = Keyword Difficulty (Squared to penalize difficulty exponentially)"
             ]
           },
           {
@@ -106,7 +143,7 @@ export const dossierData = {
             visualizationType: "vector",
             variables: [
               "A = Our Content Vector",
-              "B = The 'Ideal' Vector",
+              "B = The 'Ideal' Vector (Top Ranking Average)",
               "Target: Score > 0.85"
             ]
           },
@@ -117,8 +154,8 @@ export const dossierData = {
             visualizationType: "bandit",
             variables: [
               "Q = Estimated Value (CTR)",
-              "R = Actual Reward (Clicks)",
-              "α = Learning Rate"
+              "R = Actual Reward (Observed Clicks)",
+              "α = Learning Rate (Speed of adaptation)"
             ]
           }
         ]
@@ -126,19 +163,53 @@ export const dossierData = {
       protocol: {
         intro: "",
         phases: [
-          { title: "Phase 1: The Initialization", role: "Data Scientist", task: "Run SEL. Scrap market data, apply Efficiency formula.", deliverable: "The 'Gold List'." },
-          { title: "Phase 2: The Gate Check", role: "Technical Lead", task: "Run TRU. Compare domain metrics against difficulty.", deliverable: "Go/No-Go Decision." },
-          { title: "Phase 3: The Blueprinting", role: "Architect", task: "Run ARC. Map clusters using SERP overlap.", deliverable: "The 'Attack Map'." },
-          { title: "Phase 4: Manufacturing", role: "Content Engineer", task: "Run SEM. Generate content. Verify Vector Alignment.", deliverable: "Published Assets." },
-          { title: "Phase 5: The Watchtower", role: "Growth Hacker", task: "Run SIG. Monitor CTR. Deploy Bandit tests.", deliverable: "Yield Reports." }
+          {
+            title: "Phase 1: The Initialization (Days 1-5)",
+            role: "Data Scientist / Strategist",
+            task: "Run the SEL module. Scrap market data, apply the Efficiency formula.",
+            deliverable: "The 'Gold List' (Top 50 viable keywords)."
+          },
+          {
+            title: "Phase 2: The Gate Check (Day 6)",
+            role: "Technical Lead",
+            task: "Run the TRU module. Compare domain metrics against the average difficulty of the 'Gold List.'",
+            deliverable: "Decision: Green (Proceed) or Red (Abort)."
+          },
+          {
+            title: "Phase 3: The Blueprinting (Days 7-10)",
+            role: "Architect / SEO Manager",
+            task: "Run ARC. Map the 'Gold List' into clusters using SERP overlap. Define the URL structure.",
+            deliverable: "The 'Attack Map' (Sitemap)."
+          },
+          {
+            title: "Phase 4: Manufacturing (Days 11-30)",
+            role: "Content Engineer / AI Operator",
+            task: "Run SEM. Generate content. Verify Vector Alignment. Inject Schema Entities.",
+            deliverable: "Published Assets."
+          },
+          {
+            title: "Phase 5: The Watchtower (Ongoing)",
+            role: "Growth Hacker",
+            task: "Run SIG. Monitor Search Console. Identify low CTR pages. Deploy new titles (Bandit arms).",
+            deliverable: "Monthly Yield Reports."
+          }
         ]
       },
       values: {
         intro: "This framework is designed to protect the team:",
         points: [
-          { title: "Protection from Futility", description: "No one ever works on a 'dead end' project because SEL and TRU filter them out." },
-          { title: "Cognitive Clarity", description: "Separating ARC (Planning) from SEM (Doing) reduces context switching." },
-          { title: "Measurable Success", description: "Every step has a mathematical 'Success State,' providing validation." }
+          {
+            title: "Protection from Futility",
+            description: "No one ever works on a 'dead end' project because SEL and TRU filter them out."
+          },
+          {
+            title: "Cognitive Clarity",
+            description: "The separation of ARC (Planning) and SEM (Doing) allows creators to focus purely on creation without worrying about strategy."
+          },
+          {
+            title: "Measurable Success",
+            description: "Every step has a mathematical 'Success State,' providing constant dopamine hits and validation for the team."
+          }
         ]
       }
     },
@@ -148,12 +219,12 @@ export const dossierData = {
       subject: 'Isomorphic Signal Transmission & Market Positioning',
       description: "A framework for high-signal communication, viewing marketing as an electrical circuit to transmit a value proposition with zero impedance.",
       summary: {
-        p1: "The Brand-Resonance Graph rejects the 'Creative-First' approach in favor of a Signal Transmission Isomorphism.",
-        p2: "We view Marketing as an electrical circuit connecting a Source (Product Truth) to a Receiver (Customer Wallet). The goal is to transmit the value proposition with zero impedance.",
+        p1: "The Brand-Resonance Graph is a framework for high-signal communication. It rejects the 'Creative-First' approach (starting with logos, slogans, or ad aesthetics) in favor of a Signal Transmission Isomorphism.",
+        p2: "We view Marketing not as 'art,' but as an electrical circuit connecting a Source (Product Truth) to a Receiver (Customer Wallet). The goal is to transmit the value proposition with zero impedance (friction/confusion).",
         directive: 'Do not shout louder. Tune the frequency to match the receiver.'
       },
       isomorphism: {
-        intro: 'We map branding into 5 disjoint nodes to establish a clear circuit where the signal triggers a specific voltage response.'
+        intro: 'We map the chaotic world of branding into 5 disjoint, testable nodes. The goal is to establish a clear circuit where the signal ($Message$) triggers a specific voltage response ($Action$) in the receiver.'
       },
       nodes: [
         {
@@ -161,60 +232,60 @@ export const dossierData = {
           name: 'PAIN (The Enemy)',
           function: 'The Voltage Source.',
           logic: '"Negative Motivation."',
-          input: 'Customer interviews, complaint forums.',
-          output: 'The specific "Hell" the customer lives in.',
-          failureState: '"Nice-to-Have" Syndrome.'
+          input: 'Customer interviews, complaint forums, negative reviews of competitors.',
+          output: 'The specific "Hell" the customer is currently living in.',
+          failureState: '"Nice-to-Have" Syndrome (Solving a minor annoyance instead of a bleeding neck).'
         },
         {
           id: 'B',
           name: 'WHO (The Receiver)',
           function: 'The Tuning Fork.',
           logic: '"Radical Exclusion."',
-          input: 'Psychographics, behavioral triggers.',
-          output: 'A single, hyper-specific Avatar.',
-          failureState: '"Broadcasting" (Static).'
+          input: 'Demographic data, psychographics, behavioral triggers.',
+          output: 'A single, hyper-specific Avatar (e.g., "Frustrated CTOs scaling past Series B," not "Business Owners").',
+          failureState: '"Broadcasting" (Trying to speak to everyone, resulting in static).'
         },
         {
           id: 'C',
-          name: 'POS (Positioning)',
+          name: 'POS (Positioning / The Filter)',
           function: 'The Frequency Modulator.',
           logic: `"The 'Only' Claim."`,
           input: 'Competitive landscape map.',
-          output: 'The "Only" Statement.',
-          failureState: '"Me-Too" Positioning.'
+          output: 'The statement: "We are the only [Category] that [Solves Pain A] for [Who B]."',
+          failureState: '"Me-Too" Positioning (Being better, not different).'
         },
         {
           id: 'D',
-          name: 'CHAN (Channel)',
+          name: 'CHAN (Channel / The Wire)',
           function: 'The Transmission Medium.',
           logic: '"Contextual Fit."',
-          input: 'Where the WHO consumes info.',
-          output: 'One primary channel.',
-          failureState: '"Omnichannel Dilution".'
+          input: 'Where the "WHO" actually consumes information (e.g., LinkedIn for CTOs, TikTok for Gen Z).',
+          output: 'The single primary channel for distribution.',
+          failureState: '"Omnichannel Dilution" (Trying to be everywhere with insufficient resources).'
         },
         {
           id: 'E',
-          name: 'CREAT (Creative)',
+          name: 'CREAT (Creative / The Payload)',
           function: 'The Signal Packet.',
           logic: '"Visual/Verbal Encoding."',
-          input: 'Outputs of Pain, Who, Pos.',
-          output: 'Ads, headlines, assets.',
-          failureState: '"Art for Art\'s Sake".'
+          input: 'The outputs of Pain, Who, and Pos.',
+          output: 'The ad, the headline, the video, the colors.',
+          failureState: `"Art for Art's Sake" (Beautiful ads that say nothing).`
         }
       ],
       solution: {
-        intro: 'Most companies fail by starting at CREAT. The Alpine Shortest Path is:',
+        intro: 'Most companies fail because they start at CREAT (making cool ads) or CHAN (posting on social media) without the prerequisites. The Alpine Shortest Path is:',
         path: ['PAIN', 'WHO', 'POS', 'CHAN', 'CREAT'],
         reasons: [
-          { title: 'PAIN First', description: 'Define the energy source. No pain = no market.' },
-          { title: 'WHO Second', description: 'Identify who has that pain.' },
-          { title: 'POS Third', description: "Design the key to unlock their problem." },
-          { title: 'CHAN Fourth', description: 'Find where they live.' },
-          { title: 'CREAT Last', description: 'Construct the message to fit.' }
+          { title: 'PAIN First', description: 'We define the energy source. If there is no pain, there is no market. (Entropy Check).' },
+          { title: 'WHO Second', description: 'We identify who has that pain.' },
+          { title: 'POS Third', description: "We design the specific key to unlock that person's problem." },
+          { title: 'CHAN Fourth', description: 'We find where that person lives.' },
+          { title: 'CREAT Last', description: 'We construct the message to fit the channel and the person.' }
         ]
       },
       formulas: {
-        intro: 'Strict mathematical models govern our creative decisions.',
+        intro: 'This framework runs on strict mathematical models, not intuition.',
         items: [
           {
             title: 'I. The Resonance Score (R)',
@@ -222,36 +293,76 @@ export const dossierData = {
             equation: 'R = (P × I) / N',
             visualizationType: 'static',
             variables: [
-              'P = Pain Intensity (1-10)',
-              'I = Identity Match (1-10)',
-              'N = Market Noise'
+              'P = Pain Intensity (How bad does it hurt? 1-10)',
+              'I = Identity Match (How much do they see themselves in the copy? 1-10)',
+              'N = Market Noise (How many competitors are saying the same thing?)',
+              'Goal: Maximize P and I, Minimize N via Positioning.'
             ]
           },
           {
             title: 'II. The Conversion Probability (Cp)',
-            description: 'Dictates creative strategy: Increase Motivation/Value, reduce Friction/Anxiety.',
+            description: 'This formula dictates our Creative strategy: Increase M/V, reduce F/A.',
             equation: 'Cp = (M + V) / F - A',
             visualizationType: 'static',
-            variables: ['M = Motivation', 'V = Value', 'F = Friction', 'A = Anxiety']
+            variables: [
+              'M = Motivation (Pain)',
+              'V = Value Clarity (Positioning)',
+              'F = Friction (Channel/UX difficulty)',
+              'A = Anxiety (Trust)'
+            ]
           }
         ]
       },
       protocol: {
         intro: "",
         phases: [
-          { title: 'Phase 1: Diagnostics', role: 'Strategist', task: 'Run PAIN & WHO. Conduct Jobs-to-be-Done interviews.', deliverable: 'The "Enemy Profile".' },
-          { title: 'Phase 2: Calibration', role: 'Product Marketer', task: 'Run POS. Map competitors. Find White Space.', deliverable: 'Positioning Manifesto.' },
-          { title: 'Phase 3: Wiring', role: 'Growth Hacker', task: 'Run CHAN. Audit audience hangouts.', deliverable: 'Channel Strategy.' },
-          { title: 'Phase 4: Encoding', role: 'Designer', task: 'Run CREAT. Translate Manifesto into assets.', deliverable: 'High-Signal Assets.' },
-          { title: 'Phase 5: Feedback', role: 'Analyst', task: 'Measure Resonance. Trace failures back up the graph.', deliverable: 'Yield Reports.' }
+          {
+            title: 'Phase 1: The Diagnostics (Days 1-5)',
+            role: 'Strategist / Founder',
+            task: 'Run PAIN & WHO. Conduct 10 "Jobs-to-be-Done" interviews. Scrape Reddit/reviews for "hate" keywords.',
+            deliverable: 'The "Enemy Profile" (e.g., "The Enemy is Spreadsheet Chaos").'
+          },
+          {
+            title: 'Phase 2: The Calibration (Days 6-8)',
+            role: 'Product Marketer',
+            task: 'Run POS. Map the competitors. Find the "White Space." Draft the "Only" Statement.',
+            deliverable: 'The Positioning Manifesto.'
+          },
+          {
+            title: 'Phase 3: The Wiring (Day 9)',
+            role: 'Growth Hacker',
+            task: 'Run CHAN. Audit where the "WHO" spends time. Select ONE primary channel.',
+            deliverable: 'The Channel Strategy (e.g., "100% LinkedIn Inbound").'
+          },
+          {
+            title: 'Phase 4: The Encoding (Days 10-20)',
+            role: 'Copywriter / Designer',
+            task: 'Run CREAT. Translate the Manifesto into assets (Ads, Landing Pages) that fit the Channel.',
+            deliverable: 'High-Signal Assets.'
+          },
+          {
+            title: 'Phase 5: The Feedback (Ongoing)',
+            role: 'Analyst',
+            task: 'Measure Resonance (R). If CTR is low, is it the Creative (Node E) or did we get the Pain (Node A) wrong? Trace back up the graph.',
+            deliverable: 'Monthly Yield Reports.'
+          }
         ]
       },
       values: {
-        intro: 'Designed for high-signal communication:',
+        intro: 'This framework is designed to protect the team:',
         points: [
-          { title: 'End of Subjective Hell', description: 'Creative decisions are dictated by PAIN and WHO nodes. Data wins.' },
-          { title: 'Respect for the Audience', description: "We don't spam. We only transmit where listening occurs." },
-          { title: 'Sanity for the Team', description: 'Creativity flourishes in constraints; it drowns in infinite choice.' }
+          {
+            title: 'End of Subjective Hell',
+            description: 'We stop arguing about "blue vs. red" or "funny vs. serious." Creative decisions are dictated by the PAIN and WHO nodes. Data wins.'
+          },
+          {
+            title: 'Respect for the Audience',
+            description: "We don't spam. We only transmit on channels where the user is listening, and we only speak to pains we can actually solve."
+          },
+          {
+            title: 'Sanity for the Team',
+            description: 'By defining the "Enemy" and the "Avatar" first, the creative team has clear constraints. Creativity flourishes in constraints; it drowns in infinite choice.'
+          }
         ]
       }
     },
@@ -853,5 +964,38 @@ export const dossierData = {
       },
       bottomLine: "Work isn't flat, so why is your software? The Work Engine is the only platform deep enough to handle your complexity, but simple enough that your team will actually want to use it."
     }
-  ]
+  ],
+  // NEW SECTIONS BELOW
+  aboutPage: {
+    hero: {
+      title: "The Resinen Doctrine",
+      subtitle: "We are not consultants. We are architects of entropy reduction. We believe that business is not an art, but a physics problem waiting to be solved."
+    },
+    sections: [
+      {
+        title: "The Axiom",
+        content: "Traditional consulting is based on 'Best Practices'—a statistical regression to the mean. It tells you what worked for others yesterday. Resinen is based on 'First Principles'—the specific physics of your business graph. We do not ask 'What is industry standard?' We ask 'What is mathematically optimal?'"
+      },
+      {
+        title: "The Methodology",
+        content: "We use Isomorphic Mapping. We translate chaotic business problems (Hiring, Sales, SEO) into solved mathematical problems (Signal Processing, Graph Traversal, Game Theory). Once mapped, the solution becomes an algorithm, not a guess."
+      },
+      {
+        title: "The Standard",
+        content: "We do not bill by the hour. We do not sell PowerPoint decks. We build Engines—systems that run without us. If we cannot measure the yield of our work, we do not send the invoice."
+      }
+    ]
+  },
+  contactPage: {
+    title: "Initialize Engagement",
+    subtitle: "Resinen operates by invitation and application. We accept a limited number of partners each quarter to ensure maximum operational bandwidth.",
+    formFields: [
+      { label: "Entity Name", placeholder: "Company or Organization" },
+      { label: "Operational Sector", placeholder: "e.g. SaaS, Manufacturing, FinTech" },
+      { label: "Primary Constraint", placeholder: "What is the single biggest bottleneck?" },
+      { label: "Signal Coordinates", placeholder: "Email Address" }
+    ]
+  }
+
+  
 };
