@@ -1,64 +1,61 @@
-import React from 'react';
-import { dossierData } from '../constants';
-import { ScrollReveal } from '../components/ScrollReveal';
-import { motion } from 'framer-motion';
+import React, { useEffect, useState } from 'react';
+import { api, type ContentBlock } from '../api';
 
-export const AboutPage: React.FC = () => {
-  const { hero, sections } = dossierData.aboutPage;
+const AboutPage = () => {
+  const [blocks, setBlocks] = useState<ContentBlock[]>([]);
+  
+  useEffect(() => {
+    // Fetch CMS blocks for the about section
+    api.getSectionBlocks('about').then(setBlocks);
+  }, []);
 
   return (
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
-      <ScrollReveal>
-        <div className="text-center mb-20">
-            <motion.div 
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.8 }}
-                className="inline-block px-4 py-1 border border-cyan-500/30 rounded-full bg-cyan-900/10 text-cyan-400 text-sm font-mono tracking-widest mb-6"
-            >
-                OPERATIONAL PHILOSOPHY
-            </motion.div>
-            <h1 className="text-4xl sm:text-6xl font-black text-white mb-8 leading-tight">{hero.title}</h1>
-            <p className="text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed">{hero.subtitle}</p>
-        </div>
-      </ScrollReveal>
-
-      <div className="max-w-4xl mx-auto space-y-24">
-        {sections.map((section, index) => (
-            <ScrollReveal key={index} delay={index * 0.1}>
-                <div className="flex flex-col md:flex-row gap-8 items-start border-l-2 border-gray-700 pl-8 md:pl-12 relative">
-                    <div className="absolute -left-[9px] top-0 w-4 h-4 bg-gray-900 border-2 border-cyan-500 rounded-full"></div>
-                    <div className="md:w-1/3">
-                        <h2 className="text-3xl font-bold text-white mb-2">{section.title}</h2>
-                        <div className="h-1 w-12 bg-cyan-500 mt-4"></div>
-                    </div>
-                    <div className="md:w-2/3">
-                        <p className="text-lg text-gray-300 leading-loose">{section.content}</p>
-                    </div>
-                </div>
-            </ScrollReveal>
-        ))}
+    <div className="min-h-screen bg-sp-green font-sans py-24 px-6 relative">
+      
+      {/* PAGE TITLE */}
+      <div className="max-w-4xl mx-auto text-center mb-20">
+        <h1 className="inline-block bg-white text-5xl md:text-7xl font-black px-8 py-4 border-4 border-black shadow-hard transform -rotate-2">
+            OUR MISSION
+        </h1>
       </div>
 
-      <ScrollReveal delay={0.4}>
-        <div className="mt-24 p-8 bg-gray-800/30 border border-gray-700 rounded-xl text-center">
-            <h3 className="text-2xl font-bold text-white mb-4">The Architecture of Dominance</h3>
-            <p className="text-gray-400 mb-8">We do not offer solutions to everyone. We offer weapons to the few.</p>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-                {[
-                    { label: "Global Clients", value: "12" },
-                    { label: "Revenue Optimized", value: "$4.2B" },
-                    { label: "Entropy Reduced", value: "94%" },
-                    { label: "Frameworks", value: "7" }
-                ].map((stat, i) => (
-                    <div key={i} className="p-4 bg-gray-900/50 rounded-lg">
-                        <p className="text-3xl font-mono font-bold text-cyan-400">{stat.value}</p>
-                        <p className="text-xs uppercase tracking-widest text-gray-500 mt-2">{stat.label}</p>
-                    </div>
-                ))}
-            </div>
-        </div>
-      </ScrollReveal>
+      {/* CARDS GRID */}
+      <div className="container mx-auto max-w-6xl">
+        {blocks.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+            {blocks.map((block, i) => {
+               // Alternating colors for cards
+               const cardColor = i % 2 === 0 ? 'bg-white' : 'bg-[#FFF9C4]'; // White vs Pale Yellow
+               const rotation = i % 2 === 0 ? 'rotate-1' : '-rotate-1';
+
+               return (
+                <div 
+                  key={block.slug}
+                  className={`${cardColor} border-4 border-black p-8 shadow-hard-lg transform ${rotation} hover:scale-105 transition-transform duration-300`}
+                >
+                  {/* Pin Graphic */}
+                  <div className="w-6 h-6 rounded-full bg-sp-red border-2 border-black mx-auto -mt-12 mb-6 shadow-sm"></div>
+
+                  <h3 className="text-3xl font-black mb-4 text-black uppercase border-b-4 border-black pb-2 inline-block">
+                    {block.title}
+                  </h3>
+                  <p className="text-lg font-bold text-gray-800 leading-relaxed whitespace-pre-wrap">
+                    {block.body}
+                  </p>
+                </div>
+               );
+            })}
+          </div>
+        ) : (
+          /* EMPTY STATE (Paper style) */
+          <div className="max-w-md mx-auto bg-white border-4 border-dashed border-black/50 p-12 text-center transform rotate-2">
+            <p className="text-2xl font-black text-gray-400 mb-4">NO DATA FOUND</p>
+            <p className="font-bold text-gray-500">
+              Go to Codex CMS and create blocks with section: <span className="text-sp-red">about</span>
+            </p>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

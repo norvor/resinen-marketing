@@ -1,98 +1,69 @@
 // src/api.ts
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8001';
+// 1. Point to your local backend port (8000)
+const API_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000/api/v1';
 
-// --- TYPES ---
-export type HomePageData = {
-    hero_title: string;
-    hero_subtitle: string;
-    hero_cta_primary: string;
-    hero_cta_secondary: string;
-    ticker_items: { label: string, value: string }[];
+export type ContentBlock = {
+    slug: string;
+    section: string;
+    title: string;
+    body: string;
+    image_url?: string;
+    link_text?: string;
+    link_url?: string;
+    is_active: boolean;
 };
 
 export type SiteConfig = {
     brand_name: string;
+    footer_text: string;
     navigation: { label: string; path: string }[];
     social_links: { linkedin?: string; x?: string; github?: string };
-    footer_text: string;
 };
 
-export type BlogPost = {
-    slug: string;
-    title: string;
-    summary: string;
-    category: string;
-    created_at: string;
-    published: boolean;
-};
-
-// --- RICH ENGINE TYPES ---
-export type EngineModule = {
-    title: string;
-    problem: string;
-    solution: string;
-    detail: string;
-};
-
-export type ComparisonRow = {
-    feature: string;
-    standard: string;
-    resinen: string;
-};
-
-export type Engine = {
-    id: string;
-    name: string;
-    category: string;
-    description: string;
-    bottomLine: string;
-    hero: {
-        title: string;
-        subtitle: string;
-        solution: string;
-    };
-    modules: EngineModule[];
-    comparison: {
-        intro: string;
-        analogy: string;
-        rows: ComparisonRow[];
-    };
-};
-
-// --- THE FETCHER OBJECT ---
 export const api = {
-    // 1. Get Homepage Data
-    getHomePage: async (): Promise<HomePageData> => {
-        const res = await fetch(`${API_URL}/homepage`);
-        if (!res.ok) throw new Error('Failed to fetch home');
-        return res.json();
+    // 1. Get a specific block (e.g. 'home_hero')
+    getContentBlock: async (slug: string): Promise<ContentBlock | null> => {
+        try {
+            const res = await fetch(`${API_URL}/content/${slug}`);
+            if (!res.ok) return null;
+            return res.json();
+        } catch (e) {
+            console.error(`Error fetching block ${slug}:`, e);
+            return null;
+        }
     },
 
-    // 2. Get All Engines (List for Grid)
-    getEngines: async (): Promise<Engine[]> => {
-        const res = await fetch(`${API_URL}/engines`);
-        return res.json();
+    // 2. Get all blocks for a section (e.g. 'home_features')
+    getSectionBlocks: async (section: string): Promise<ContentBlock[]> => {
+        try {
+            const res = await fetch(`${API_URL}/content/section/${section}`);
+            if (!res.ok) return [];
+            return res.json();
+        } catch (e) {
+            console.error(`Error fetching section ${section}:`, e);
+            return [];
+        }
     },
 
-    // 3. Get Single Engine (Detail Page) <--- THIS WAS MISSING
-    getEngine: async (id: string): Promise<Engine> => {
-        const res = await fetch(`${API_URL}/engines/${id}`);
-        if (!res.ok) throw new Error('Engine not found');
-        return res.json();
-    },
-
-    // 4. Get Blog Posts
-    getPosts: async (): Promise<BlogPost[]> => {
-        const res = await fetch(`${API_URL}/posts`);
-        return res.json();
-    },
-
+    // 3. Get Site Config (Footer, Socials)
     getConfig: async (): Promise<SiteConfig> => {
-        const res = await fetch(`${API_URL}/config`);
-        if (!res.ok) throw new Error('Failed to load config');
-        return res.json();
+        try {
+            const res = await fetch(`${API_URL}/config`);
+            if (!res.ok) return {
+                brand_name: "RESINEN",
+                footer_text: "System Nominal",
+                navigation: [],
+                social_links: {}
+            };
+            return res.json();
+        } catch (e) {
+            return {
+                brand_name: "RESINEN",
+                footer_text: "System Nominal",
+                navigation: [],
+                social_links: {}
+            };
+        }
     }
-
-
 };

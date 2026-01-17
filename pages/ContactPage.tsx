@@ -1,60 +1,54 @@
 import React from 'react';
-import { dossierData } from '../constants';
-import { ScrollReveal } from '../components/ScrollReveal';
-import { motion } from 'framer-motion';
 
-export const ContactPage: React.FC = () => {
-  const { title, subtitle, formFields } = dossierData.contactPage;
-
+const ContactPage = () => {
   return (
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 flex flex-col items-center">
-      <ScrollReveal width="100%" className="max-w-2xl">
-        <div className="text-center mb-12">
-            <h1 className="text-4xl font-black text-white mb-4">{title}</h1>
-            <p className="text-gray-400">{subtitle}</p>
+    <div className="min-h-screen bg-sp-orange font-sans relative overflow-hidden flex items-center justify-center py-20 px-4">
+      
+      {/* Background Decor */}
+      <div className="absolute top-20 left-10 w-32 h-32 bg-sp-yellow border-4 border-black rounded-full opacity-50"></div>
+      <div className="absolute bottom-20 right-10 w-48 h-48 bg-sp-cyan border-4 border-black transform rotate-12 opacity-50"></div>
+
+      <div className="max-w-xl w-full relative z-10">
+        
+        {/* HEADER TAPE */}
+        <div className="w-40 h-10 bg-[#e5e5e5]/90 border-l-4 border-r-4 border-black mx-auto -mb-6 relative z-20 transform -rotate-2"></div>
+
+        {/* MAIN CARD */}
+        <div className="bg-white border-4 border-black p-8 md:p-12 shadow-hard-lg transform rotate-1">
+          <div className="text-center mb-10">
+            <h1 className="text-4xl md:text-5xl font-black mb-4 uppercase text-black transform -rotate-1">
+              Contact Us
+            </h1>
+            <p className="text-lg font-bold text-gray-600">
+              Fill out the form below to initialize the protocol.
+            </p>
+          </div>
+
+          <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
+            <div className="transform -rotate-1">
+              <label className="block text-sm font-black text-black uppercase mb-2 ml-1">Identity (Email)</label>
+              <input 
+                type="email" 
+                className="w-full bg-sp-paper border-4 border-black px-4 py-4 text-black font-bold focus:bg-white focus:shadow-hard outline-none transition-all placeholder:text-gray-400" 
+                placeholder="you@entity.com" 
+              />
+            </div>
+            
+            <div className="transform rotate-1">
+              <label className="block text-sm font-black text-black uppercase mb-2 ml-1">Transmission</label>
+              <textarea 
+                rows={5} 
+                className="w-full bg-sp-paper border-4 border-black px-4 py-4 text-black font-bold focus:bg-white focus:shadow-hard outline-none transition-all placeholder:text-gray-400" 
+                placeholder="Type your message..."
+              ></textarea>
+            </div>
+
+            <button className="w-full bg-sp-cyan text-black text-xl font-black py-5 border-4 border-black shadow-hard hover:translate-x-[4px] hover:translate-y-[4px] hover:shadow-none transition-all uppercase">
+              Send Message
+            </button>
+          </form>
         </div>
-
-        <motion.form 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="bg-gray-800/50 border border-gray-700 p-8 rounded-xl shadow-2xl relative overflow-hidden"
-            onSubmit={(e) => e.preventDefault()}
-        >
-            {/* Decorative Top Bar */}
-            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-cyan-500 to-blue-600"></div>
-
-            <div className="space-y-6">
-                {formFields.map((field, index) => (
-                    <div key={index}>
-                        <label className="block text-xs font-mono font-bold text-cyan-400 uppercase tracking-widest mb-2">
-                            {field.label}
-                        </label>
-                        <input 
-                            type="text" 
-                            placeholder={field.placeholder}
-                            className="w-full bg-gray-900 border border-gray-600 rounded-md p-4 text-white placeholder-gray-600 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all"
-                        />
-                    </div>
-                ))}
-                
-                <div className="pt-4">
-                    <button 
-                        className="w-full bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-4 rounded-md transition-all shadow-[0_0_20px_rgba(6,182,212,0.3)] hover:shadow-[0_0_30px_rgba(6,182,212,0.5)] flex justify-center items-center gap-2 group"
-                    >
-                        <span>TRANSMIT APPLICATION</span>
-                        <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-                    </button>
-                </div>
-            </div>
-
-            <div className="mt-6 text-center">
-                <p className="text-xs text-gray-600 font-mono">
-                    SECURE CONNECTION ESTABLISHED // ENCRYPTION: AES-256
-                </p>
-            </div>
-        </motion.form>
-      </ScrollReveal>
+      </div>
     </div>
   );
 };
